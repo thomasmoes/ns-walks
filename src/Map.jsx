@@ -139,7 +139,7 @@ export default function Map() {
                     <strong>Distance:</strong> {track.distance} km
                   </p>
                   <p className="m-0 mb-1">
-                    <strong>Estimated walking time:</strong> {Math.ceil(track.distance * 12)} minutes
+                    <strong>Estimated walking toime:</strong> {Math.ceil(track.distance * 12)} minutes
                   </p>
                   <p className="m-0">
                     <strong>Route ID:</strong> {track.filename.split('-')[0]}
