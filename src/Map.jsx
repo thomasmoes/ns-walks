@@ -1,6 +1,6 @@
 import { MapContainer, TileLayer, Polyline, Popup } from 'react-leaflet';
-import { useEffect, useState } from 'react';
-import 'leaflet/dist/leaflet.css';
+import { useState, useEffect } from 'react';
+import './Map.css';
 
 export default function Map() {
   const [tracks, setTracks] = useState([]);
@@ -34,7 +34,6 @@ export default function Map() {
               const parser = new DOMParser();
               const gpxDoc = parser.parseFromString(gpxText, 'text/xml');
               
-              // Format the name nicely from filename
               const defaultName = filename
                 .replace('.gpx', '')
                 .split('-')
@@ -48,10 +47,7 @@ export default function Map() {
                 parseFloat(point.getAttribute('lon'))
               ]);
 
-              // Calculate distance
               const distance = calculateDistance(trackPoints);
-              
-              // Get start and end points
               const startPoint = trackPoints[0];
               const endPoint = trackPoints[trackPoints.length - 1];
 
@@ -62,7 +58,7 @@ export default function Map() {
                 distance,
                 startPoint,
                 endPoint,
-                filename // Keep the original filename for reference
+                filename
               };
             } catch (error) {
               console.error(`Error loading ${filename}:`, error);
@@ -82,7 +78,6 @@ export default function Map() {
     loadGpxFiles();
   }, []);
 
-  // Helper function to calculate distance
   const calculateDistance = (points) => {
     let distance = 0;
     for (let i = 0; i < points.length - 1; i++) {
@@ -133,21 +128,27 @@ export default function Map() {
               }
             }}
           >
-            <Popup maxWidth={300}>
-              <div style={{ padding: '10px' }}>
-                <h3 style={{ margin: '0 0 10px 0' }}>{track.name}</h3>
+            <Popup maxWidth={440}>
+              <div className="flex flex-col items-start w-[440px] p-[30px] gap-[10px] bg-[#F1AE8F] shadow-[0_-20px_20px_0_rgba(0,0,0,0.25)]">
+                <h3 className="text-lg font-bold m-0">{track.name}</h3>
                 {track.description && (
-                  <p style={{ margin: '0 0 10px 0' }}>{track.description}</p>
+                  <p className="text-sm m-0">{track.description}</p>
                 )}
-                <div style={{ fontSize: '0.9em' }}>
-                  <p style={{ margin: '5px 0' }}>
+                <div className="text-sm w-full">
+                  <p className="m-0 mb-1">
                     <strong>Distance:</strong> {track.distance} km
                   </p>
-                  <p style={{ margin: '5px 0' }}>
+                  <p className="m-0 mb-1">
                     <strong>Estimated walking time:</strong> {Math.ceil(track.distance * 12)} minutes
                   </p>
-                  <p style={{ margin: '5px 0' }}>
+                  <p className="m-0">
                     <strong>Route ID:</strong> {track.filename.split('-')[0]}
+                  </p>
+                  <p className="m-0">
+                    <strong>Start coordinates:</strong> {track.startPoint[0].toFixed(4)}, {track.startPoint[1].toFixed(4)}
+                  </p>
+                  <p className="m-0">
+                    <strong>End coordinates:</strong> {track.endPoint[0].toFixed(4)}, {track.endPoint[1].toFixed(4)}
                   </p>
                 </div>
               </div>
